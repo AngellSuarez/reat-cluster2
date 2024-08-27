@@ -28,7 +28,7 @@ Router.delete("/users/:id",(req,res)=>{
     .catch((error)=>res.json({messaje:error}));
 });
 
-Router.update("/users/:id",(req,res)=>{
+Router.put("/users/:id",(req,res)=>{
     const {id} = req.params;
     const {name,age,email} =req.body;
     userSchema
