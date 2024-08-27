@@ -19,12 +19,21 @@ Router.get("/users/",(req,res)=>{
     .catch((error)=>res.json({messaje:error}))
 })
 
-Router.get("/users/:id",(req,res)=>{
-    const {id} = req.params;
+Router.get("/users/:id", (req, res) => {
+    const { id } = req.params;
+
     userSchema
-    .finById(id)
-    .then((data)=>res.json(data))
-    .catch((error)=>res.json({messaje:error}));
+        .findById(id)
+        .then((data) => {
+            if (!data) {
+                return res.status(404).json({ message: "User not found" });
+            }
+            res.json(data);
+        })
+        .catch((error) => {
+            console.error(error);
+            res.status(500).json({ message: "Internal server error" });
+        });
 });
 
 Router.delete("/users/:id",(req,res)=>{
