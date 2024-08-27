@@ -12,6 +12,13 @@ Router.post("/users",(req,res)=>{
     .catch((error)=>res.json({messaje:error}));
 });
 
+Router.get("/users/",(req,res)=>{
+    userSchema
+    .find()
+    .then((data)=>res.json(data))
+    .catch((error)=>res.json({messaje:error}))
+})
+
 Router.get("/users/:id",(req,res)=>{
     const {id} = req.params;
     userSchema
