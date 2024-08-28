@@ -7,9 +7,9 @@ const Router = express.Router()
 Router.post("/users",(req,res)=>{
     const user = userSchema(req.body);
     user
-    .save()
-    .then((data)=>res.json(data))
-    .catch((error)=>res.json({messaje:error}));
+        .save()
+        .then((data)=>res.json(data))
+        .catch((error)=>res.json({messaje:error}));
 });
 
 Router.get("/users/",(req,res)=>{
@@ -39,18 +39,34 @@ Router.get("/users/:id", (req, res) => {
 Router.delete("/users/:id",(req,res)=>{
     const {id} = req.params;
     userSchema
-    .deleteOne({_id:id})
-    .then((data)=>res.json(data))
-    .catch((error)=>res.json({messaje:error}));
+        .deleteOne({_id:id})
+        .then((data)=>{
+            if(!data){
+                return res.status(400).json({message: "user not found"});
+            }
+            res.json({message:"User deleted succesfully"})
+        })
+        .catch((error)=>{
+            console.error(error)
+            res.status(500).json({message:"Internal server error"})
+        });
 });
 
 Router.put("/users/:id",(req,res)=>{
     const {id} = req.params;
     const {name,age,email} =req.body;
     userSchema
-    .updateOne({_id:id},{$set:{name,age,email}})
-    .then((data)=>res.json(data))
-    .catch((error)=>res.json({messaje:error}));
+        .updateOne({_id:id},{$set:{name,age,email}})
+        .then((data)=>{
+            if(!data){
+                return res.status(400).json({message:"user not found"})
+            }
+            res.json({message:"User updated succesfully"})
+        })
+        .catch((error)=>{
+            console.error(error)
+            res.status(500).json({message:"Internal server error"})
+        });
 });
 
 module.exports = Router
